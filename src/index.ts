@@ -11,29 +11,29 @@ import { validateUser } from './repository/user-data-access';
 
 
 //app
-const app :Application=express();
+const app: Application = express();
 app.use(bodyparser.json());
 app.use(sessionMiddleware);
 
 
 //login and authentication
-app.post("/login",async (req:Request,res:Response)=>{
+app.post("/login", async (req: Request, res: Response) => {
     console.log(req.url);
-    const{username, password}=req.body;
-    if(!username||!password){                        
+    const { username, password } = req.body;
+    if (!username || !password) {
         res.json("please enter all the details");
-    }else{
-        try{
+    } else {
+        try {
             //function to authenticate and verify details
-            const user=await validateUser(username,password);
-            if(req.session){
-                req.session.user=user;
+            const user = await validateUser(username, password);
+            if (req.session) {
+                req.session.user = user;
                 console.log(req.session.user);
             }
             res.json(user);
 
         }
-        catch(e){
+        catch (e) {
             console.log(e);
             res.status(400).send("Invalid Credentials")
 
@@ -45,29 +45,29 @@ app.post("/login",async (req:Request,res:Response)=>{
 
 
 //port
-app.listen(60004,()=>{
+app.listen(60004, () => {
     console.log(`app has startrd`);
 
-//promise -connectionPool.connect returns a pool client
-//if then fails then catch is called
+    //promise -connectionPool.connect returns a pool client
+    //if then fails then catch is called
     connectionPool.connect().then(
-        (client:PoolClient)=>{
+        (client: PoolClient) => {
             client.query('select id from ademo').then(
-                (result:QueryResult)=>{
+                (result: QueryResult) => {
                     console.log("connection sucess");
                     console.log(result.rows[0]);
-                    client&&client.release();
-    
+                    client && client.release();
+
                 }
             )
         }
-    ).catch((e)=>{console.log(e.message)})
+    ).catch((e) => { console.log(e.message) })
 });
 
 
 
-app.use("/hello",(req:Request,res:Response)=>{
-res.json("welcome to the hello endpoint inside the server");
+app.use("/hello", (req: Request, res: Response) => {
+    res.json("welcome to the hello endpoint inside the server");
 
 
 
@@ -77,8 +77,8 @@ res.json("welcome to the hello endpoint inside the server");
 });
 
 
-app.use("/users",userRouter);
-app.use("/reimbursements",reimRouter);
+app.use("/users", userRouter);
+app.use("/reimbursements", reimRouter);
 
 
 
