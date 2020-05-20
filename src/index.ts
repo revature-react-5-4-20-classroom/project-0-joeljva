@@ -46,7 +46,7 @@ app.post("/login", async (req: Request, res: Response) => {
 
 //port
 app.listen(60004, () => {
-    console.log(`app has startrd`);
+    console.log(`app has started`);
 
     //promise -connectionPool.connect returns a pool client
     //if then fails then catch is called
@@ -67,7 +67,7 @@ app.listen(60004, () => {
 
 
 app.use("/hello", (req: Request, res: Response) => {
-    res.json("welcome to the hello endpoint inside the server");
+    res.json("welcome to the hello endpoint inside the server, this server  has multiple endpoints for the company to handle it's reimbursements");
 
 
 
