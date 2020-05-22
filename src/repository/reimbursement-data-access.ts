@@ -102,10 +102,10 @@ export async function updateReimbursement(update: any[]): Promise<Reimbursement>
     console.log(arr);
     try {
 
-        client.query("BEGIN");
+       await client.query("BEGIN");
         let x = await client.query(`${query}`, arr);            //catch unhandled promise error    use await
         let result = await client.query(`select * from reimbursement where reimbursement_id=$1`, [id]);
-        client.query("COMMIT");
+       await  client.query("COMMIT");
         if (result.rows.length < 1) {
             throw new Error("the id doesn't exist");
         } else {
@@ -116,7 +116,7 @@ export async function updateReimbursement(update: any[]): Promise<Reimbursement>
 
     }
     catch (e) {
-        client.query("ROLLBACK");
+      await   client.query("ROLLBACK");
         console.log(e);
         throw new Error("unable to update");
 
