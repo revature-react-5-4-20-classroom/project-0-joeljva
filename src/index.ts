@@ -7,11 +7,13 @@ import { reimRouter } from './routers/reimbursementsRouter';
 import { connectionPool } from './repository';
 import { PoolClient, QueryResult } from 'pg';
 import { validateUser } from './repository/user-data-access';
+import { corsFilter } from './middleware/CoreFilter';
 
 
 
 //app
 const app: Application = express();
+app.use(corsFilter);
 app.use(bodyparser.json());
 app.use(sessionMiddleware);
 
@@ -67,7 +69,7 @@ app.listen(60005, () => {
 
 
 app.use("/hello", (req: Request, res: Response) => {
-    res.json("welcome hello asd123456 to the hello endpoint inside the server, this server  has multiple endpoints for the company to handle it's reimbursements");
+    res.json("hello and welcome to inside the server");
 
 
 
