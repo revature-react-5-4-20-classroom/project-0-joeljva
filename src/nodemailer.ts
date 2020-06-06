@@ -56,7 +56,7 @@ import nodemailer from "nodemailer";
         `
     }
   
-    transporter.sendMail(mailOptions,function(error,info){
+    transporter.sendMail(mailOptions,function(error:any,info:any){
         if(error){
             console.log(error);
         }else{
