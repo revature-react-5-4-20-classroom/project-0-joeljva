@@ -90,11 +90,11 @@ reimRouter.post("/", async (req: Request, res: Response) => {
     if (req.session && req.session.user) {
 
         if (req.session.user.userId !== author) {
-            res.json("please enter your correct userId")
+            res.status(401).json("please enter your correct userId")
         } else {
-
+console.log(type);
             if (!(author && amount && dateSubmitted && description && type)) {    //if u can try for some way to authenticate via username later
-                res.json("please enter all the details");
+                res.status(400).json("please enter all the details");
             } else {
                 try {
                     let result = await addNewReimbursement(author, amount, dateSubmitted, description, type);
@@ -102,7 +102,7 @@ reimRouter.post("/", async (req: Request, res: Response) => {
 
                 }
                 catch (e) {
-                    res.json(e.message);
+                    res.status(400).json(e.message);
 
                 }
             }
@@ -122,7 +122,7 @@ reimRouter.patch("/", async (req: Request, res: Response, next: NextFunction) =>
         let role: string = req.session.user.roleName;
 
         if (role != "finance-manager") {
-            res.json("You have to be a finance manager to update");
+            res.status(401).json("You have to be a finance manager to update");
         } else {
 
             let { reimbursementId, dateResolved, description, resolver, status } = req.body;
@@ -139,11 +139,13 @@ reimRouter.patch("/", async (req: Request, res: Response, next: NextFunction) =>
                 } else {
                     try {
                         let result = await updateReimbursement(update);
+                        console.log(result);
                         res.json(result);
 
                     }
                     catch (e) {
-                        res.json(e.message)
+                        console.log(e)
+                        res.status(400).json(e.message)
                     }
 
                 }

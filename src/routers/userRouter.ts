@@ -79,13 +79,16 @@ userRouter.patch("/", async (req: Request, res: Response) => {
 
 
     if (req.session && req.session.user) {
-        let role: string = req.session.user.roleName;
-
-        if (role !== "admin") {
-            res.json("You have to be a admin to update");
-        } else {
+        let roles: string = req.session.user.roleName;
+let userIds=req.session.user.userId;
+console.log(userIds);
+      
             let { userId, username, password, firstName, lastName, email, role } = req.body;
-
+            console.log(userId);
+            console.log(userId==userIds)
+            if ((userIds!==userId)&&(roles !== "admin")) {
+                res.status(401).json("You have to be a admin1234 to update");
+            } else {
 
             if (!userId || isNaN(userId)) {
                 res.json("Please enter useId properly and in a number format");

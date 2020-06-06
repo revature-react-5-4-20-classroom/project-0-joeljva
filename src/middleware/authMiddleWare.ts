@@ -4,7 +4,7 @@ import session from 'express-session';
 //user authenication for all
 export function checkUserMiddleware(req: Request, res: Response, next: NextFunction) {
     if (!(req.session && req.session.user)) {
-        res.json("please login first");
+        res.status(400).json("please login first");
 
     } else {
         next();

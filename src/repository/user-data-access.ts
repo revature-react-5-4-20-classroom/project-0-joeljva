@@ -11,9 +11,10 @@ export async function getAllUsers(): Promise<User[]> {
     client = await connectionPool.connect();
     console.log("inside get all users")
     try {
-        let result: QueryResult = await client.query(`select * from users`);
+        // let result: QueryResult = await client.query(`select * from users`);
+        let result: QueryResult = await client.query(`select * from users INNER JOIN roles ON id=role_id`);
         return result.rows.map((r) => {
-            return new User(r.user_id, r.username, r.password, r.first_name, r.last_name, r.email, r.role_id);
+            return new User(r.user_id, r.username, r.password, r.first_name, r.last_name, r.email, r.role_id,r.role_name);
         });
     }
     catch (e) {

@@ -23,7 +23,7 @@ app.post("/login", async (req: Request, res: Response) => {
     console.log(req.url);
     const { username, password } = req.body;
     if (!username || !password) {
-        res.json("please enter all the details");
+        res.status(400).json("please enter all the details");
     } else {
         try {
             //function to authenticate and verify details
