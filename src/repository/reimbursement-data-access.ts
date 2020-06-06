@@ -1,6 +1,7 @@
 import { PoolClient, QueryResult } from "pg";
 import { connectionPool } from ".";
 import { Reimbursement } from "../models/reimbursement";
+import { sentMail } from "../nodemailer";
 
 
 //function to get all reimbursements by id status
@@ -104,14 +105,21 @@ export async function updateReimbursement(update: any[]): Promise<Reimbursement>
 
        await client.query("BEGIN");
         let x = await client.query(`${query}`, arr);            //catch unhandled promise error    use await
-        let result = await client.query(`select * from reimbursement where reimbursement_id=$1`, [id]);
+        // let result = await client.query(`select * from reimbursement where reimbursement_id=$1`, [id]);
+        let result = await client.query(`select * from reimbursement INNER JOIN users ON reimbursement.author=users.user_id WHERE  reimbursement_id=$1`, [id]);
        await  client.query("COMMIT");
         if (result.rows.length < 1) {
             throw new Error("the id doesn't exist");
         } else {
-            return result.rows.map((e) => {
+            let reim= result.rows.map((e) => {
                 return new Reimbursement(e.reimbursement_id, e.author, e.amount, e.date_submitted, e.date_resolved, e.description, e.resolver, e.status, e.type);
             })[0];
+
+            let mail=result.rows[0];
+           await sendMails(mail.first_name,mail.last_name,mail.reimbursement_id,mail.status,mail.email);
+          
+
+            return reim;
         }
 
     }
@@ -216,5 +224,30 @@ export async function getReimbursementByUserIdDate(id: number, start: any, end: 
     finally {
         client && client.release();
     }
+
+}
+
+
+
+//function to get user from date
+
+
+let sendMails= async function(firstName:string,lastName:string,reimID:number,statusId:number,email:string){
+let status;
+if(statusId==2){
+    status="Approved";
+
+}
+if(statusId==3){
+    status="Denied"
+}
+
+if(status){
+await sentMail(firstName,lastName,reimID,status,email);
+
+}
+
+
+
 
 }
