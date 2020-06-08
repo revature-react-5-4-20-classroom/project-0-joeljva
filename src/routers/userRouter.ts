@@ -119,7 +119,7 @@ console.log(userIds);
                                 }
                                 catch (e) {
                                     console.log(e.message);
-                                    res.json(e.message)
+                                    res.status(400).json(e.message)
                                 }
 
 
@@ -134,7 +134,7 @@ console.log(userIds);
 
                     } catch (e) {
 
-                        res.json(e.message);
+                        res.status(400).json(e.message);
 
                     }
                 }
