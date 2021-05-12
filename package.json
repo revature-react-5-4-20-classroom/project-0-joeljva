@@ -39,7 +39,7 @@
     "express-fileupload": "^1.1.7-alpha.3",
     "express-session": "^1.17.1",
     "fs": "0.0.1-security",
-    "nodemailer": "^6.4.8",
+    "nodemailer": "^6.4.16",
     "pg": "^8.2.1"
   }
 }
